@@ -102,24 +102,26 @@ def print_message(message, divided_message, pipe):
     print('Double pipe: ', pipe)
 
 
-def print_hash(hashed_pipe: np.array, hashBitLengh: int):
+def get_hash(hashed_pipe: np.array, hashBitLengh: int):
     bytes_hash = hashed_pipe.tobytes()
+    hash = ''
     match hashBitLengh:
         case 224:
             for i in range(36, 64):
-                print(format(bytes_hash[i], '02x'), end='')
+                hash += format(bytes_hash[i], '02x')
         case 256:
             for i in range(32, 64):
-                print(format(bytes_hash[i], '02x'), end='')
+                hash += format(bytes_hash[i], '02x')
         case 384:
             for i in range(80, 128):
-                print(format(bytes_hash[i], '02x'), end='')
+                hash += format(bytes_hash[i], '02x')
         case 512:
             for i in range(64, 128):
-                print(format(bytes_hash[i], '02x'), end='')
+                hash += (format(bytes_hash[i], '02x'))
         case _:
             raise AssertionError('Printing Hash failed \n')
-    print('\n')
+
+    return hash
 
 
 def bmw(message, hashBitLength):
@@ -139,4 +141,4 @@ def bmw(message, hashBitLength):
         divided_message = divide_message(padded_message[i * divider:(i + 1) * divider], hashBitLength)
         _, pipe = update(divided_message, pipe, hashBitLength)
     new_pipe, hashed_pipe = final(pipe, hashBitLength)
-    print_hash(hashed_pipe, hashBitLength)
+    print(get_hash(hashed_pipe, hashBitLength))
