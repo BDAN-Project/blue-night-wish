@@ -142,3 +142,4 @@ def bmw(message, hashBitLength):
         _, pipe = update(divided_message, pipe, hashBitLength)
     new_pipe, hashed_pipe = final(pipe, hashBitLength)
     return get_hash(hashed_pipe, hashBitLength)
+
