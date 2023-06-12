@@ -1,7 +1,7 @@
 from components import i224p2, i256p2, i384p2, i512p2, const32final, const64final
 import warnings
 import numpy as np
-from functions import Compression256, Compression512
+from functions import compression256, compression512
 
 warnings.filterwarnings("ignore")
 
@@ -74,9 +74,9 @@ def pipe_init(hashBitLengh):
 def update(divided_message, pipe, hashBitLengh):
     match hashBitLengh:
         case 224 | 256:
-            divided_message, new_pipe = Compression256(divided_message, pipe)
+            divided_message, new_pipe = compression256(divided_message, pipe)
         case 384 | 512:
-            divided_message, new_pipe = Compression512(divided_message, pipe)
+            divided_message, new_pipe = compression512(divided_message, pipe)
         case _:
             raise AssertionError('Incorrect Hash bit length. Error in update()')
 
@@ -87,10 +87,10 @@ def final(pipe, hashBitLengh):
     match hashBitLengh:
         case 224 | 256:
             const32final_np = np.array(const32final, dtype=np.uint32)
-            old_pipe, hashed_pipe = Compression256(pipe, const32final_np)
+            old_pipe, hashed_pipe = compression256(pipe, const32final_np)
         case 384 | 512:
             const64final_np = np.array(const64final, dtype=np.uint64)
-            old_pipe, hashed_pipe = Compression512(pipe, const64final_np)
+            old_pipe, hashed_pipe = compression512(pipe, const64final_np)
         case _:
             raise AssertionError("Final shuffle failed. Error at final()")
     return old_pipe, hashed_pipe
@@ -141,4 +141,5 @@ def bmw(message, hashBitLength):
         divided_message = divide_message(padded_message[i * divider:(i + 1) * divider], hashBitLength)
         _, pipe = update(divided_message, pipe, hashBitLength)
     new_pipe, hashed_pipe = final(pipe, hashBitLength)
-    print(get_hash(hashed_pipe, hashBitLength))
+    return get_hash(hashed_pipe, hashBitLength)
+
