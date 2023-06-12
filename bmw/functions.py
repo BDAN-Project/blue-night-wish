@@ -29,7 +29,7 @@ def expand32_2(i, M32, H, Q):
     )
 
 
-def Compression256(M32, H):
+def compression256(M32, H):
     W = np.zeros(16, dtype=np.uint32)
     Q = np.zeros(32, dtype=np.uint32)
     if printing:
@@ -81,9 +81,6 @@ def Compression256(M32, H):
     Q[14] = s32_4(W[14]) + H[15]
     Q[15] = s32_0(W[15]) + H[0]
 
-    # print("--------------")
-    # for i in range(16):
-    #     print(sys.getsizeof(Q[i]))
     # Message expansion or f_1 in the documentation
     # It has 16 rounds
     # Blue Midnight Wish has two tunable security parameters
@@ -154,7 +151,7 @@ def expand64_2(i, M64, H, Q):
                 - rotl64(M64[(i - 6) % 16], ((i - 6) % 16) + 1)) ^ H[(i - 16 + 7) % 16]))
 
 
-def Compression512(M64, H):
+def compression512(M64, H):
     W = np.zeros(16, dtype=np.uint64)
     Q = np.zeros(32, dtype=np.uint64)
     if printing:
